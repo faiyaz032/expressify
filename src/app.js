@@ -6,6 +6,7 @@ const { StatusCodes } = require('http-status-codes');
 const cors = require('cors');
 const defineGlobalErrorHandler = require('./middlewares/defineGlobalErrorHandler');
 const notFoundHandler = require('./middlewares/notFoundHandler');
+const defineMetrics = require('./libraries/utils/defineMetrics');
 
 const initializeApp = (expressApp) => {
   dotenv.config();
@@ -15,6 +16,8 @@ const initializeApp = (expressApp) => {
   expressApp.use(helmet());
   expressApp.use(express.urlencoded({ extended: true }));
   expressApp.use(express.json());
+
+  defineMetrics(expressApp);
 
   //health check route
   expressApp.get('/health', (req, res) => {
