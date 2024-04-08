@@ -1,3 +1,4 @@
+const logger = require('./libraries/logger/LoggerManager');
 const { startServer } = require('./server');
 
 const start = async () => {
@@ -6,8 +7,8 @@ const start = async () => {
 
 start()
   .then(() => {
-    console.log(`Server started successfully`);
+    logger.info(`Server is successfully live`);
   })
   .catch((error) => {
-    console.error(error);
+    logger.error(error);
   });

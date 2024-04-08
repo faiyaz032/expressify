@@ -1,5 +1,6 @@
 const promClient = require('prom-client');
 const responseTime = require('response-time');
+const logger = require('../logger/LoggerManager');
 
 // Define a histogram metric for response time
 
@@ -54,7 +55,7 @@ const defineMetrics = async (expressApp) => {
       const metrics = await promClient.register.metrics();
       res.send(metrics);
     } catch (error) {
-      console.error('Error fetching metrics:', error);
+      logger.error('Error fetching metrics:', error);
       res.status(500).send('Error fetching metrics');
     }
   });

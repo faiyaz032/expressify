@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const errorHandler = require('../libraries/error-handling');
+const logger = require('../libraries/logger/LoggerManager');
 
 const defineGlobalErrorHandler = (expressApp) => {
   expressApp.use((error, req, res, next) => {
@@ -8,7 +9,7 @@ const defineGlobalErrorHandler = (expressApp) => {
         error.operational = true;
       }
     }
-    console.error('error', error);
+    logger.error(error);
     errorHandler.handleError(error);
 
     res.status(error?.statusCode || 500).json({

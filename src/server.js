@@ -2,6 +2,7 @@ const express = require('express');
 const { StatusCodes } = require('http-status-codes');
 const initializeApp = require('./app');
 const errorHandler = require('./libraries/error-handling');
+const logger = require('./libraries/logger/LoggerManager');
 
 let connection;
 
@@ -17,7 +18,7 @@ const startServer = async () => {
   const expressApp = createExpressApp();
   const server = await openConnection(expressApp);
 
-  console.log(`Server is alive on PORT:${server.port}`);
+  logger.info(`Server will be live on PORT:${server.port}`);
 };
 
 async function stopServer() {

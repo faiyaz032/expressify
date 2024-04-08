@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const util = require('util');
 const AppError = require('./AppError');
+const logger = require('../logger/LoggerManager');
 
 let httpServerRef;
 
@@ -44,7 +45,7 @@ const errorHandler = {
 };
 
 const terminateServer = async () => {
-  console.log('Gracefully shutting down the server...');
+  logger.warn('Server is gracefully shutting down...');
   if (httpServerRef) {
     await new Promise((resolve) => httpServerRef.close(resolve)); // Graceful shutdown
   }
