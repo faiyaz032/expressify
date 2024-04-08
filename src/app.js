@@ -1,10 +1,22 @@
+//dependencies
 const express = require('express');
+const helmet = require('helmet');
+const dotenv = require('dotenv');
 const { StatusCodes } = require('http-status-codes');
-const AppError = require('./libraries/error-handling/AppError');
+const cors = require('cors');
+const defineGlobalErrorHandler = require('./middlewares/defineGlobalErrorHandler');
+const notFoundHandler = require('./middlewares/notFoundHandler');
 
 const initializeApp = (expressApp) => {
-  const router = express.Router();
+  dotenv.config();
 
+  //enable middlewares
+  expressApp.use(cors());
+  expressApp.use(helmet());
+  expressApp.use(express.urlencoded({ extended: true }));
+  expressApp.use(express.json());
+
+  //health check route
   expressApp.get('/health', (req, res) => {
     res.status(StatusCodes.OK).json({
       success: true,
@@ -12,14 +24,8 @@ const initializeApp = (expressApp) => {
     });
   });
 
-  expressApp.all('*', (req, res, next) => {
-    next(
-      new AppError(
-        StatusCodes.NOT_FOUND,
-        `Can't find your requested url: '${req.originalUrl}' in the server`
-      )
-    );
-  });
+  expressApp.all('*', notFoundHandler);
+  defineGlobalErrorHandler(expressApp);
 };
 
 module.exports = initializeApp;
