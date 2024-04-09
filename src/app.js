@@ -9,6 +9,7 @@ const notFoundHandler = require('./middlewares/notFoundHandler');
 const defineMetrics = require('./libraries/utils/defineMetrics');
 const logger = require('./libraries/logger/LoggerManager');
 const requestLogger = require('./middlewares/requestLogger');
+const addRequestId = require('./middlewares/addRequestId');
 
 const initializeApp = (expressApp) => {
   logger.info('Initializing app...');
@@ -21,6 +22,7 @@ const initializeApp = (expressApp) => {
   expressApp.use(express.json());
 
   expressApp.use(requestLogger);
+  expressApp.use(addRequestId);
 
   defineMetrics(expressApp);
 

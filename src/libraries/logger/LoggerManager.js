@@ -1,4 +1,5 @@
 const winston = require('winston');
+const { getFromRequestContext } = require('../utils/requestContext');
 
 function createLoggerInstance() {
   const logger = winston.createLogger({
@@ -9,7 +10,14 @@ function createLoggerInstance() {
       }),
       winston.format.errors({ stack: true }),
       winston.format.splat(),
-      winston.format.json()
+      winston.format.json(),
+      winston.format((info) => {
+        const requestId = getFromRequestContext('requestId');
+        if (requestId) {
+          info.requestId = requestId;
+        }
+        return info;
+      })()
     ),
   });
 
