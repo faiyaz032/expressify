@@ -10,6 +10,7 @@ const defineMetrics = require('./libraries/utils/defineMetrics');
 const logger = require('./libraries/logger/LoggerManager');
 const requestLogger = require('./middlewares/requestLogger');
 const addRequestId = require('./middlewares/addRequestId');
+const initializeModules = require('./modules');
 
 const initializeApp = (expressApp) => {
   logger.info('Initializing app...');
@@ -25,6 +26,12 @@ const initializeApp = (expressApp) => {
   expressApp.use(addRequestId);
 
   defineMetrics(expressApp);
+
+  const router = express.Router();
+
+  initializeModules(router);
+
+  expressApp.use('/api/v1', router);
 
   //health check route
   expressApp.get('/health', (req, res) => {
