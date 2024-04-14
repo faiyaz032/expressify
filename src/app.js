@@ -1,48 +1,53 @@
-//dependencies
 const express = require('express');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
-const { StatusCodes } = require('http-status-codes');
 const cors = require('cors');
 const defineGlobalErrorHandler = require('./middlewares/defineGlobalErrorHandler');
 const notFoundHandler = require('./middlewares/notFoundHandler');
 const defineMetrics = require('./libraries/utils/defineMetrics');
-const logger = require('./libraries/logger/LoggerManager');
 const requestLogger = require('./middlewares/requestLogger');
 const addRequestId = require('./middlewares/addRequestId');
-const initializeModules = require('./modules');
+const logger = require('./libraries/logger/LoggerManager');
+const { loadDependencies } = require('./configs/container');
+const initializeCoreModules = require('./modules');
 
-const initializeApp = (expressApp) => {
-  logger.info('Initializing app...');
-  dotenv.config();
+class AppFactory {
+  static createApp() {
+    logger.info('Creating app...');
+    const app = express();
+    dotenv.config();
 
-  //enable middlewares
-  expressApp.use(cors());
-  expressApp.use(helmet());
-  expressApp.use(express.urlencoded({ extended: true }));
-  expressApp.use(express.json());
+    // Enable middlewares
+    app.use(cors());
+    app.use(helmet());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(express.json());
 
-  expressApp.use(requestLogger);
-  expressApp.use(addRequestId);
+    app.use(requestLogger);
+    app.use(addRequestId);
 
-  defineMetrics(expressApp);
+    defineMetrics(app);
 
-  const router = express.Router();
+    const router = express.Router();
 
-  initializeModules(router);
+    loadDependencies();
+    initializeCoreModules(router);
 
-  expressApp.use('/api/v1', router);
+    app.use('/api/v1', router);
 
-  //health check route
-  expressApp.get('/health', (req, res) => {
-    res.status(StatusCodes.OK).json({
-      success: true,
-      message: 'Server is healthy',
+    // Health check route
+    app.get('/health', (req, res) => {
+      res.status(StatusCodes.OK).json({
+        success: true,
+        message: 'Server is healthy',
+      });
     });
-  });
 
-  expressApp.all('*', notFoundHandler);
-  defineGlobalErrorHandler(expressApp);
-};
+    app.all('*', notFoundHandler);
+    defineGlobalErrorHandler(app);
 
-module.exports = initializeApp;
+    return app;
+  }
+}
+
+module.exports = AppFactory;

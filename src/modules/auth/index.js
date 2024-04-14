@@ -1,4 +1,4 @@
-const authRoutes = require('./routes');
+const authRoutes = require('./auth.routes');
 
 const initializeAuthModule = (expressRouter) => {
   expressRouter.use('/auth', authRoutes());

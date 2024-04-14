@@ -1,7 +1,9 @@
 const initializeAuthModule = require('./auth');
 
-const initializeModules = (expressRouter) => {
+const initializeCoreModules = (expressRouter) => {
   initializeAuthModule(expressRouter);
+
+  //Initialize other routers
 };
 
-module.exports = initializeModules;
+module.exports = initializeCoreModules;

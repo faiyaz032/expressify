@@ -1,11 +1,12 @@
 const logger = require('./libraries/logger/LoggerManager');
-const { startServer } = require('./server');
+const Server = require('./server');
 
-const start = async () => {
-  await startServer();
+const runServer = async () => {
+  const server = new Server();
+  await server.run();
 };
 
-start()
+runServer()
   .then(() => {
     logger.info(`Server is successfully live`);
   })

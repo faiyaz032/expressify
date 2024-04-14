@@ -1,45 +1,39 @@
-const express = require('express');
 const { StatusCodes } = require('http-status-codes');
-const initializeApp = require('./app');
+const AppFactory = require('./app');
 const errorHandler = require('./libraries/error-handling');
 const logger = require('./libraries/logger/LoggerManager');
 
-let connection;
+class Server {
+  constructor() {
+    this.connection = undefined;
+  }
 
-const createExpressApp = () => {
-  const expressApp = express();
+  async run() {
+    const expressApp = AppFactory.createApp();
+    const server = await this.openConnection(expressApp);
+    logger.info(`Server will be live on PORT:${server.port}`);
+  }
 
-  initializeApp(expressApp);
+  async terminate() {
+    return new Promise((resolve) => {
+      if (this.connection !== undefined) {
+        this.connection.close(() => {
+          resolve();
+        });
+      }
+    });
+  }
 
-  return expressApp;
-};
+  async openConnection(expressApp) {
+    return new Promise((resolve, reject) => {
+      const PORT = process.env.PORT || 8008;
 
-const startServer = async () => {
-  const expressApp = createExpressApp();
-  const server = await openConnection(expressApp);
-
-  logger.info(`Server will be live on PORT:${server.port}`);
-};
-
-async function stopServer() {
-  return new Promise((resolve) => {
-    if (connection !== undefined) {
-      connection.close(() => {
-        resolve();
+      this.connection = expressApp.listen(PORT, () => {
+        errorHandler.listenToErrorEvents(this.connection);
+        resolve(this.connection.address());
       });
-    }
-  });
+    });
+  }
 }
 
-const openConnection = async (expressApp) => {
-  return new Promise((resolve, reject) => {
-    const PORT = process.env.PORT || 8008;
-
-    connection = expressApp.listen(PORT, () => {
-      errorHandler.listenToErrorEvents(connection);
-      resolve(connection.address());
-    });
-  });
-};
-
-module.exports = { createExpressApp, startServer, stopServer };
+module.exports = Server;
