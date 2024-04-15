@@ -1,5 +1,5 @@
 const express = require('express');
-const { container } = require('../../configs/container');
+const { container } = require('../../dependencies');
 
 const authRoutes = () => {
   const router = express.Router();

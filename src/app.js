@@ -8,7 +8,6 @@ const defineMetrics = require('./libraries/utils/defineMetrics');
 const requestLogger = require('./middlewares/requestLogger');
 const addRequestId = require('./middlewares/addRequestId');
 const logger = require('./libraries/logger/LoggerManager');
-const { loadDependencies } = require('./configs/container');
 const initializeCoreModules = require('./modules');
 
 class AppFactory {

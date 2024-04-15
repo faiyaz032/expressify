@@ -1,4 +1,6 @@
-const { loadDependencies } = require('./configs/container');
+require('dotenv').config();
+const config = require('./configs');
+const { loadDependencies } = require('./dependencies');
 const Database = require('./libraries/database/Database');
 const logger = require('./libraries/logger/LoggerManager');
 const Server = require('./server');
@@ -8,16 +10,16 @@ const runServer = async () => {
   loadDependencies();
 
   try {
-    const database = new Database('mongodb://127.0.0.1:27017/my_app');
+    const database = new Database(config.get('databaseConnectionString'));
     const server = new Server(database);
+
     await server.run();
-  } catch (error) {}
+    logger.info(`Server is successfully live`);
+  } catch (error) {
+    logger.error(error);
+  }
 };
 
-runServer()
-  .then(() => {
-    logger.info(`Server is successfully live`);
-  })
-  .catch((error) => {
-    logger.error(error);
-  });
+runServer().catch((error) => {
+  logger.error(error);
+});

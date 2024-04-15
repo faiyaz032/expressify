@@ -1,4 +1,3 @@
-const { StatusCodes } = require('http-status-codes');
 const AppFactory = require('./app');
 const errorHandler = require('./libraries/error-handling');
 const logger = require('./libraries/logger/LoggerManager');
@@ -32,7 +31,7 @@ class Server {
 
       this.connection = expressApp.listen(PORT, () => {
         errorHandler.listenToErrorEvents(this.connection);
-        resolve(this.connection);
+        resolve(this.connection.address());
       });
     });
   }

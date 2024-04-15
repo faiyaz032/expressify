@@ -26,7 +26,7 @@ function createLoggerInstance() {
     logger.add(
       new winston.transports.Console({
         format: winston.format.combine(
-          winston.format.colorize(),
+          winston.format.colorize({ all: true }),
           winston.format.simple()
         ),
       })
