@@ -1,3 +1,6 @@
+grafana/
+prometheus/
+mongodb_data/
 .env
 node_modules# Logs
 logs
@@ -8,8 +11,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
-grafana
-prometheus
+
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

@@ -30,7 +30,6 @@ class AppFactory {
 
     const router = express.Router();
 
-    loadDependencies();
     initializeCoreModules(router);
 
     app.use('/api/v1', router);

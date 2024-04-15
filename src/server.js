@@ -4,13 +4,15 @@ const errorHandler = require('./libraries/error-handling');
 const logger = require('./libraries/logger/LoggerManager');
 
 class Server {
-  constructor() {
+  constructor(database) {
     this.connection = undefined;
+    this.database = database;
   }
 
   async run() {
     const expressApp = AppFactory.createApp();
     const server = await this.openConnection(expressApp);
+    this.database.connect();
     logger.info(`Server will be live on PORT:${server.port}`);
   }
 
@@ -30,7 +32,7 @@ class Server {
 
       this.connection = expressApp.listen(PORT, () => {
         errorHandler.listenToErrorEvents(this.connection);
-        resolve(this.connection.address());
+        resolve(this.connection);
       });
     });
   }
