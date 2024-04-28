@@ -1,14 +1,10 @@
 require('dotenv').config();
 const config = require('./configs');
-const { loadDependencies } = require('./dependencies');
-const Database = require('./libraries/database/Database');
-const logger = require('./libraries/logger/LoggerManager');
+const Database = require('./shared/database/Database');
+const logger = require('./shared/logger/LoggerManager');
 const Server = require('./server');
 
 const runServer = async () => {
-  //Load all the dependencies
-  loadDependencies();
-
   try {
     const database = new Database(config.get('databaseConnectionString'));
     const server = new Server(database);

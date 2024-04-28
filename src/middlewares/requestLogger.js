@@ -1,4 +1,4 @@
-const logger = require('../libraries/logger/LoggerManager');
+const logger = require('../shared/logger/LoggerManager');
 
 const requestLogger = (req, res, next) => {
   if (req.method === 'GET' && req.url === '/metrics') {

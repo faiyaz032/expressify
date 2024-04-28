@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
-const AppError = require('../libraries/error-handling/AppError');
-const logger = require('../libraries/logger/LoggerManager');
+const AppError = require('../shared/error-handling/AppError');
+const logger = require('../shared/logger/LoggerManager');
 const _developmentConfigs = require('./development');
 const _productionConfigs = require('./production');
 

@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const AppError = require('../libraries/error-handling/AppError');
+const AppError = require('../shared/error-handling/AppError');
 
 const notFoundHandler = (req, res, next) => {
   next(

@@ -4,10 +4,10 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const defineGlobalErrorHandler = require('./middlewares/defineGlobalErrorHandler');
 const notFoundHandler = require('./middlewares/notFoundHandler');
-const defineMetrics = require('./libraries/utils/defineMetrics');
+const defineMetrics = require('./shared/utils/defineMetrics');
 const requestLogger = require('./middlewares/requestLogger');
 const addRequestId = require('./middlewares/addRequestId');
-const logger = require('./libraries/logger/LoggerManager');
+const logger = require('./shared/logger/LoggerManager');
 const initializeCoreModules = require('./modules');
 
 class AppFactory {

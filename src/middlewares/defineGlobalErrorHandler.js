@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
-const errorHandler = require('../libraries/error-handling');
-const logger = require('../libraries/logger/LoggerManager');
+const errorHandler = require('../shared/error-handling');
+const logger = require('../shared/logger/LoggerManager');
 
 const defineGlobalErrorHandler = (expressApp) => {
   expressApp.use((error, req, res, next) => {
