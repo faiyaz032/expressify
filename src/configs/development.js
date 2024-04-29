@@ -1,6 +1,5 @@
-const _developmentConfigs = {
+module.exports = {
   port: 8008,
-  databaseConnectionString: process.env.DEV_DB_CONNECTION_STRING,
+  mongodbConnectionString:
+    process.env.MONGODB_CONNECTION_STRING || 'mongodb://localhost:27017/my_app',
 };
-
-module.exports = _developmentConfigs;

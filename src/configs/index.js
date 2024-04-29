@@ -1,29 +1,54 @@
-const { StatusCodes } = require('http-status-codes');
-const AppError = require('../shared/error-handling/AppError');
+const path = require('path');
+const dotenv = require('dotenv');
+const fs = require('fs');
 const logger = require('../shared/logger/LoggerManager');
-const _developmentConfigs = require('./development');
-const _productionConfigs = require('./production');
+const AppError = require('../shared/error-handling/AppError');
+const { StatusCodes } = require('http-status-codes');
 
-let _configsToUse;
+class Config {
+  constructor() {
+    this.env = process.env.NODE_ENV.trim() || 'development';
+    this.loadEnvFile();
+    this.config = this.loadConfig();
+  }
 
-if (process.env.NODE_ENV.trim() === 'development') {
-  _configsToUse = _developmentConfigs;
-}
+  loadEnvFile() {
+    const envFilePath = path.resolve(__dirname, `../../.env.${this.env}`);
+    dotenv.config({ path: envFilePath });
+  }
 
-if (process.env.NODE_ENV.trim() === 'production') {
-  _configsToUse = _productionConfigs;
-}
+  loadConfig() {
+    const filePath = path.resolve(__dirname, `${this.env}.js`);
 
-const config = {
-  get(key) {
-    if (!_configsToUse[key]) {
-      throw new AppError(
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        `The ${key} is not available in ${process.env.NODE_ENV.trim()} configuration file`
-      );
+    if (!fs.existsSync(filePath)) {
+      const errorMessage = `Configuration file for '${this.env}' environment not found.`;
+      logger.error(errorMessage);
+      throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, errorMessage);
     }
-    return _configsToUse[key];
-  },
-};
+
+    try {
+      const configs = require(filePath);
+      logger.info(
+        `Configuration file for '${this.env}' environment loaded successfully.`
+      );
+      return configs;
+    } catch (error) {
+      const errorMessage = `Error loading configuration file for '${this.env}' environment : ${error.message}`;
+      logger.error(errorMessage);
+      throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, errorMessage);
+    }
+  }
+
+  get(key) {
+    if (!this.config.hasOwnProperty(key)) {
+      const errorMessage = `The '${key}' is not available in '${this.env}' configuration file`;
+      logger.error(errorMessage);
+      throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, errorMessage);
+    }
+    return this.config[key];
+  }
+}
+
+const config = new Config();
 
 module.exports = config;

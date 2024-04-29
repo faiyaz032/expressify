@@ -14,7 +14,6 @@ class AppFactory {
   static createApp() {
     logger.info('Creating app...');
     const app = express();
-    dotenv.config();
 
     // Enable middlewares
     app.use(cors());

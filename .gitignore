@@ -2,6 +2,7 @@ grafana/
 prometheus/
 mongodb_data/
 .env
+.env.*
 node_modules# Logs
 logs
 *.log

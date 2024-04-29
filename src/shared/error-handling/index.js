@@ -46,9 +46,9 @@ const errorHandler = {
 };
 
 const terminateServer = async () => {
-  await messageBroker.close();
   logger.warn('Server is gracefully shutting down...');
   if (httpServerRef) {
+    await messageBroker.close();
     await new Promise((resolve) => httpServerRef.close(resolve)); // Graceful shutdown
   }
   process.exit();
