@@ -1,4 +1,4 @@
-const generateRandomId = require('../shared/common/generateRandomId');
+const generateRandomId = require('../shared/utils/generateRandomId');
 const { requestContext } = require('../shared/utils/requestContext');
 
 const REQUEST_ID_HEADER_NAME = 'x-request-id';

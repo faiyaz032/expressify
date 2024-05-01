@@ -1,6 +1,5 @@
 const express = require('express');
 const helmet = require('helmet');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const defineGlobalErrorHandler = require('./middlewares/defineGlobalErrorHandler');
 const notFoundHandler = require('./middlewares/notFoundHandler');
@@ -9,6 +8,7 @@ const requestLogger = require('./middlewares/requestLogger');
 const addRequestId = require('./middlewares/addRequestId');
 const logger = require('./shared/logger/LoggerManager');
 const initializeCoreModules = require('./modules');
+const { StatusCodes } = require('http-status-codes');
 
 class AppFactory {
   static createApp() {
