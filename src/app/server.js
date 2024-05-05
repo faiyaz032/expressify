@@ -1,7 +1,7 @@
 const AppFactory = require('./app');
-const config = require('./configs');
-const errorHandler = require('./shared/error-handling');
-const logger = require('./shared/logger/LoggerManager');
+const config = require('../configs');
+const errorHandler = require('../shared/error-handling');
+const logger = require('../shared/logger/LoggerManager');
 
 class Server {
   constructor(database) {

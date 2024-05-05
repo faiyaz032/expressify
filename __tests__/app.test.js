@@ -1,4 +1,4 @@
-const AppFactory = require('../src/app');
+const AppFactory = require('../src/app/app');
 const express = require('express');
 const request = require('supertest');
 

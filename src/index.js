@@ -1,7 +1,7 @@
 const config = require('./configs');
 const Database = require('./shared/database/Database');
 const logger = require('./shared/logger/LoggerManager');
-const Server = require('./server');
+const Server = require('./app/server');
 
 const runServer = async () => {
   try {
