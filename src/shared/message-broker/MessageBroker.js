@@ -3,13 +3,10 @@ const logger = require('../logger/LoggerManager');
 
 class MessageBroker {
   constructor(queueName, options = {}) {
-    if (!MessageBroker.instance) {
-      this.queue = new Queue(queueName);
-      MessageBroker.instance = this;
-      logger.info('Message broker started serving....');
-    }
+    this.options = options;
+    this.queue = new Queue(queueName);
 
-    return MessageBroker.instance;
+    logger.info('Message broker started serving....');
   }
 
   // Method to add a job to the queue with a specific name
@@ -18,8 +15,11 @@ class MessageBroker {
   }
 
   // Method to process jobs in the queue
-  async processJob(workerFunction, concurrency = 1) {
-    const worker = new Worker(this.queue.name, workerFunction, { concurrency });
+  processJob(workerFunction, concurrency = 1) {
+    const worker = new Worker(this.queue.name, workerFunction, {
+      concurrency,
+      connection: this.options.connection,
+    });
     worker.on('completed', (job) => {
       logger.info(
         `Job ${job.id} (${job.name}) completed in queue '${this.queue.name}'`
